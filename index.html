@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Пароль по ответам</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background:#f5f5f5;
+    }
+    .password-box {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 30px;
+    }
+    .pass-cell {
+        width: 40px;
+        height: 40px;
+        border: 2px solid #333;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:20px;
+        background:white;
+    }
+    .question {
+        background:white;
+        padding:15px;
+        margin-bottom:10px;
+        border-radius:6px;
+        box-shadow:0 0 5px rgba(0,0,0,0.1);
+    }
+    .answers button {
+        margin:5px;
+        padding:6px 12px;
+        cursor:pointer;
+    }
+</style>
+</head>
+<body>
+
+<h2>Введите пароль, отвечая на вопросы</h2>
+
+<div class="password-box" id="passwordBox"></div>
+
+<div id="questions"></div>
+
+<script>
+const correctPassword = "1111111111";
+let currentPassword = Array(10).fill("");
+
+const questionsData = [
+    { q: "Вопрос 1", answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] },
+    { q: "Вопрос 2", answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] },
+    { q: "Вопрос 3", answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] },
+    { q: "Вопрос 4", answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] },
+    { q: "Вопрос 5", answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] },
+    { q: "Вопрос 6", answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] },
+    { q: "Вопрос 7", answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] },
+    { q: "Вопрос 8", answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] },
+    { q: "Вопрос 9", answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] },
+    { q: "Вопрос 10",answers: [{t:"Ответ 1", v:1},{t:"Ответ 2", v:2},{t:"Ответ 3", v:3}] }
+];
+
+// Рисуем поле пароля
+const passBox = document.getElementById("passwordBox");
+for(let i=0;i<10;i++){
+    const cell = document.createElement("div");
+    cell.className = "pass-cell";
+    cell.id = "cell-"+i;
+    passBox.appendChild(cell);
+}
+
+// Рисуем вопросы
+const questionsDiv = document.getElementById("questions");
+
+questionsData.forEach((item,index)=>{
+    const qDiv = document.createElement("div");
+    qDiv.className = "question";
+    qDiv.innerHTML = `<strong>${item.q}</strong>`;
+    
+    const ansDiv = document.createElement("div");
+    ansDiv.className = "answers";
+    
+    item.answers.forEach(ans=>{
+        const btn = document.createElement("button");
+        btn.innerText = ans.t;
+        btn.onclick = ()=>answerQuestion(index, ans.v);
+        ansDiv.appendChild(btn);
+    });
+    
+    qDiv.appendChild(ansDiv);
+    questionsDiv.appendChild(qDiv);
+});
+
+function answerQuestion(qIndex, value){
+    currentPassword[qIndex] = value;
+    document.getElementById("cell-"+qIndex).innerText = value;
+    
+    // Проверяем, заполнены ли все
+    if(currentPassword.every(x => x !== "")){
+        checkPassword();
+    }
+}
+
+function checkPassword(){
+    const entered = currentPassword.join("");
+    if(entered === correctPassword){
+        alert("Пароль верный! Переход на следующую страницу...");
+        window.location.href = "next.html"; // ← следующая страница
+    } else {
+        alert("Пароль неверный. Попробуйте ещё раз.");
+    }
+}
+</script>
+
+</body>
+</html>
